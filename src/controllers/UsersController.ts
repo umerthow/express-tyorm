@@ -12,6 +12,18 @@ class UserController {
         .json({ error: "Something went wrong on the server!" });
     }
   }
+
+  async create(req: Request, res: Response) {
+    try {
+      const body = req.body
+      const response = await UserService.create(body);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Something went wrong on the server!" });
+    }
+  }
 }
 
 export default new UserController();
