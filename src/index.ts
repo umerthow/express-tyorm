@@ -19,6 +19,13 @@ AppDataSource.initialize()
         message: "Hello World! 😉",
       });
     });
+
+    app.use((req, res, next) => {
+      res.status(404).json({
+        message: 'API Not Found'
+      })
+    })
+  
     app.listen(port, () => {
       console.log("Server running in port " + port);
     });
