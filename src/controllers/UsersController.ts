@@ -14,6 +14,18 @@ class UserController {
     }
   }
 
+  async findAllCount(req: Request, res: Response) {
+    try {
+      const query = req.query
+      const response = await UserService.findAllCount(query);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Something went wrong on the server!" });
+    }
+  }
+
   async create(req: Request, res: Response) {
     try {
       const body = req.body

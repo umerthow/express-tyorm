@@ -7,6 +7,7 @@ import { validateBody } from "../middlewares/validateBody";
 const userRoute = express.Router();
 
 userRoute.get("/", UsersController.find);
+userRoute.get("/connection", UsersController.findAllCount);
 userRoute.post("/", validateBody(CreateUserDto), UsersController.create);
 userRoute.post("/many", UsersController.bulkCreate);
 userRoute.patch("/:id", UsersController.update);

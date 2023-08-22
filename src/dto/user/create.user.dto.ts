@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { IsDefined, Length, Matches } from "class-validator";
+import { Expose, Transform, Type } from "class-transformer";
+import { IsArray, IsDefined, Length, Matches, ValidateNested } from "class-validator";
 import { UserDto } from "./user.dto";
 
 export class CreateUserDto extends UserDto {

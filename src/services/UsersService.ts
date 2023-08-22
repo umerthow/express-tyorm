@@ -1,8 +1,9 @@
-import { In, Repository } from "typeorm";
+import { In, Like, Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { CreateUserDto } from "../dto/user/create.user.dto";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
 import { User } from "../entities/User";
+import { Paginate } from "../interfaces/icommon.interface";
 import { RoleEnum } from "../utils/roles";
 import { passwordHash } from "../utils/transform";
 
@@ -14,6 +15,41 @@ class UsersService {
     try {
       const response = await this.userRepository.find();
       return response;
+    } catch (err) {
+      throw new Error("Something went wrong on the server!");
+    }
+  }
+
+  async findAllCount(query: Record<string, any>): Promise<Paginate> {
+    try {
+      const take = query.take || 10
+      const skip = query.skip || 0
+      const keyword = query.keyword
+
+      let where: Record<string, any> = {}
+
+      if(keyword) {
+        where = {
+          name: Like('%' + keyword + '%') 
+        }
+      }
+
+      const response = await this.userRepository.findAndCount({
+        where: {
+          ...where
+         }, order: { name: "DESC" },
+        take: take,
+        skip: skip
+      });
+      
+      const [data, count] = response
+      
+      return {
+        data,
+        count,
+        skip,
+        take
+      };
     } catch (err) {
       throw new Error("Something went wrong on the server!");
     }
