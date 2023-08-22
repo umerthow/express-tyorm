@@ -1,13 +1,15 @@
-import * as express from "express";
-import UsersController from "../controllers/UsersController";
-import { authenticate } from "../middlewares/auth";
-import AuthController from "../controllers/AuthController";
 
-const router = express.Router();
+import { Router } from "express";
+import authRoute from "./auth.route";
+import userRoute from "./users.route";
 
-router.post("/auth/login", AuthController.login);
-router.post("/auth/register", AuthController.register);
+export class MainRouter {
+  private route = Router()
 
-router.get("/users", UsersController.find);
+  getRouter() {
+    this.route.use('/auths', authRoute)
+    this.route.use('/users', userRoute)
 
-export default router;
+    return this.route
+  }
+}

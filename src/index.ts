@@ -1,11 +1,10 @@
 import { AppDataSource } from "./data-source";
 import * as express from "express";
 import { Request, Response } from "express";
-import router from "./routes";
+import { MainRouter } from "./routes";
 
 import * as cors from "cors";
 import "dotenv/config";
-import routerV1 from "./routes/v1";
 
 AppDataSource.initialize()
   .then(async () => {
@@ -13,8 +12,8 @@ AppDataSource.initialize()
     const port = process.env.SERVER_PORT;
     app.use(cors());
     app.use(express.json());
-    app.use("/api/v1", router);
-    app.use("/api/v1", routerV1);
+    app.use("/api/v1", new MainRouter().getRouter());
+
     app.get("/", (req: Request, res: Response) => {
       res.json({
         message: "Hello World! 😉",
