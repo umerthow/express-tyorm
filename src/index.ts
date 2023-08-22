@@ -5,6 +5,7 @@ import { MainRouter } from "./routes";
 
 import * as cors from "cors";
 import "dotenv/config";
+import errorMiddleware from "./middlewares/error";
 
 AppDataSource.initialize()
   .then(async () => {
@@ -25,6 +26,8 @@ AppDataSource.initialize()
         message: 'API Not Found'
       })
     })
+
+    app.use(errorMiddleware)
   
     app.listen(port, () => {
       console.log("Server running in port " + port);
