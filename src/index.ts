@@ -1,9 +1,9 @@
 import { AppDataSource } from "./data-source";
-import * as express from "express";
+import express from "express";
 import { Request, Response } from "express";
 import { MainRouter } from "./routes";
 
-import * as cors from "cors";
+import cors from "cors";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/error";
 

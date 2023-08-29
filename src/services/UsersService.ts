@@ -4,6 +4,7 @@ import { CreateUserDto } from "../dto/user/create.user.dto";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
 import { User } from "../entities/User";
 import { Paginate } from "../interfaces/icommon.interface";
+import { filtering } from "../utils/filtering";
 import { RoleEnum } from "../utils/roles";
 import { passwordHash } from "../utils/transform";
 
@@ -25,6 +26,8 @@ class UsersService {
       const take = query.take || 10
       const skip = query.skip || 0
       const keyword = query.keyword
+      const select = query.select
+      const filter = filtering(query)
 
       let where: Record<string, any> = {}
 
@@ -34,7 +37,15 @@ class UsersService {
         }
       }
 
+      if (filter) {
+        where = { 
+          ...where,
+          ...filter
+        }
+      }
+
       const response = await this.userRepository.findAndCount({
+        select,
         where: {
           ...where
          }, order: { name: "DESC" },
