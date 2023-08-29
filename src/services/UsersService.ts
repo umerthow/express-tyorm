@@ -2,6 +2,7 @@ import { In, Like, Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { CreateUserDto } from "../dto/user/create.user.dto";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
+import { Profile } from "../entities/Profile";
 import { User } from "../entities/User";
 import { Paginate } from "../interfaces/icommon.interface";
 import { filtering } from "../utils/filtering";
@@ -9,14 +10,17 @@ import { RoleEnum } from "../utils/roles";
 import { passwordHash } from "../utils/transform";
 
 class UsersService {
-  private readonly userRepository: Repository<User> =
-    AppDataSource.getRepository(User);
-
+  private readonly userRepository: Repository<User> = AppDataSource.getRepository(User);
+  private readonly profileRepository: Repository<Profile> = AppDataSource.getRepository(Profile)
+ 
   async find(): Promise<any> {
     try {
-      const response = await this.userRepository.find();
+      const response = await this.userRepository.find({
+        relations: ['profile']
+      });
       return response;
     } catch (err) {
+      console.log(err);
       throw new Error("Something went wrong on the server!");
     }
   }
@@ -72,11 +76,37 @@ class UsersService {
         role: body.role || RoleEnum.USER,
         email: body.email,
         name: body.name,
-        password: passwordHash(body.password)
+        password: passwordHash(body.password),
       }
-      const response = await this.userRepository.save(payload);
-      return response;
+
+      let userId: string
+
+      try {
+        const response = await this.userRepository.save(payload);
+        await this.profileRepository.save({
+          address: '',
+          userId: response.id
+        })
+        userId = response.id
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
+
+      const getUser = this.userRepository.find(
+        {
+         where: {
+           id: userId
+         },
+         relations: ['profile']
+        }
+       )
+      
+      
+       return getUser;
+     
     } catch (err) {
+      console.log(err);
       throw new Error("Something went wrong on the server!");
     }
     

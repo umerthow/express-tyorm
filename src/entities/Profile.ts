@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity("profiles")
@@ -9,7 +9,8 @@ export class Profile {
   @Column({ nullable: true, length: 255 })
   address: string;
 
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, (user) => user)
+  @JoinColumn({ foreignKeyConstraintName: 'userId'})
   user: User;
 
   @Column({ unique: true })

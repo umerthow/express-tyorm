@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -31,7 +32,7 @@ export class User {
   @JoinTable()
   roles: Role[];
 
-  @OneToOne(() => Profile)
+  @OneToOne(() => Profile, (profile) => profile.user )
   profile: Profile;
 
   @OneToMany(() => Follows, (follows) => follows.follower)
