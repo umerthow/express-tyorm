@@ -7,6 +7,17 @@ class PostController {
     try {
       const body = req.body
       const response = await PostsService.create(body);
+      
+      responseHandler(res, response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async find(_req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await PostsService.find();
+
       responseHandler(res, response)
     } catch (error) {
       next(error)

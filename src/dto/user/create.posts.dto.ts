@@ -1,4 +1,4 @@
-import { IsDefined, IsString } from "class-validator"
+import { IsDefined, IsOptional, IsString } from "class-validator"
 
 export class CreatePostsDto {
   @IsDefined()
@@ -12,4 +12,8 @@ export class CreatePostsDto {
   @IsDefined()
   @IsString()
   createdById!: string
+
+  @IsOptional()
+  @IsString()
+  updatedById?: string
 }

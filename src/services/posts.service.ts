@@ -10,11 +10,28 @@ class PostsService {
     const payload: CreatePostsDto = {
       title: body.title,
       content: body.content,
-      createdById: body.createdById
+      createdById: body.createdById,
+      updatedById: body.createdById
     }
 
     const response = await this.postsRepository.save(payload)
     
+    const getData = await this.postsRepository.find({
+      where: {
+        createdById: response.createdById
+      },
+      relations:['createdBy', 'updatedBy']
+    })
+
+
+    return getData;
+  }
+
+  async find(): Promise<any> {
+    const response = await this.postsRepository.find({
+      relations:['createdBy', 'updatedBy']
+    });
+
     return response;
   }
 }

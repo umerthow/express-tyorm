@@ -22,7 +22,7 @@ export class Post {
   @OneToMany(() => Reply, (reply) => reply.post)
   replies!: Reply[];
 
-  @Column()
+  @Column({ default: () => "now()"})
   createdAt!: Date;
 
   @Column({ default: () => "now()", onUpdate: "now()" })
