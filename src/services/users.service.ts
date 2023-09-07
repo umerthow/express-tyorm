@@ -4,7 +4,7 @@ import { CreateUserDto } from "../dto/user/create.user.dto";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
 import { Profile } from "../entities/profile.entity";
 import { User } from "../entities/user.entity.";
-import { Paginate } from "../interfaces/icommon.interface";
+import { Paginate } from "interfaces/icommon.interface";
 import { filtering } from "../utils/filtering";
 import { RoleEnum } from "../utils/roles";
 import { passwordHash } from "../utils/transform";
