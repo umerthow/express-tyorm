@@ -1,24 +1,24 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
+import { User } from "./user.entity.";
 
 @Entity("profiles")
 export class Profile {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({ nullable: true, length: 255 })
-  address: string;
+  address!: string;
 
   @OneToOne(() => User, (user) => user)
-  @JoinColumn({ foreignKeyConstraintName: 'userId'})
-  user: User;
+  @JoinColumn({ foreignKeyConstraintName: 'userId' })
+  user!: User;
 
   @Column({ unique: true })
-  userId: string;
+  userId!: string;
 
   @Column({ default: () => "now()" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ default: () => "now()", onUpdate: "now()" })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

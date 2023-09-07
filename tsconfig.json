@@ -1,5 +1,7 @@
 {
    "compilerOptions": {
+      "sourceRoot": ".",
+      "baseUrl": "./src",
       "lib": [
          "es5",
          "es6"
@@ -11,6 +13,6 @@
       "outDir": "./build",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "sourceMap": true
+      "sourceMap": true 
    }
 }

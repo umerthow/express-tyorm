@@ -1,12 +1,12 @@
 import { Expose, Transform } from "class-transformer";
-import { IsDefined, IsEmail, IsEnum, IsIn, IsOptional, IsString, Matches } from "class-validator";
+import { IsDefined, IsEmail, IsEnum, IsOptional, IsString } from "class-validator";
 import { RoleEnum } from "../../utils/roles";
 
 export class UserDto {
   @IsDefined()
   @Expose()
   @IsString()
-  name: string;
+  name!: string;
 
   @IsOptional()
   @Transform(({ value }) => ("" + value).toUpperCase())
@@ -14,5 +14,5 @@ export class UserDto {
   role?: RoleEnum;
 
   @IsEmail()
-  email: string;
+  email!: string;
 }

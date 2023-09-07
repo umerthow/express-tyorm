@@ -5,38 +5,38 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Reply } from "./Reply";
-import { User } from "./User";
+import { Reply } from "./reply.entity";
+import { User } from "./user.entity.";
 
 @Entity("posts")
 export class Post {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({ length: 255 })
-  title: string;
+  title!: string;
 
   @Column()
-  content: string;
+  content!: string;
 
   @OneToMany(() => Reply, (reply) => reply.post)
-  replies: Reply[];
+  replies!: Reply[];
 
   @Column()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ default: () => "now()", onUpdate: "now()" })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @ManyToOne(() => User, (user) => user.posts)
-  createdBy: User;
+  createdBy!: User;
 
   @Column()
-  createdById: string;
+  createdById!: string;
 
   @ManyToOne(() => User, (user) => user.updatedPosts)
-  updatedBy: User;
+  updatedBy!: User;
 
   @Column({ nullable: true })
-  updatedById: string;
+  updatedById!: string;
 }

@@ -1,17 +1,17 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
+import { User } from "./user.entity.";
 
 @Entity("follows")
 export class Follows {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => User, (user) => user.following)
-  follower: User;
+  follower!: User;
 
   @ManyToOne(() => User, (user) => user.followedBy)
-  following: User;
+  following!: User;
 
   @Column({ default: () => "now()" })
-  createdAt: Date;
+  createdAt!: Date;
 }

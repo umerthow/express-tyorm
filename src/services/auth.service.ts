@@ -2,8 +2,8 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
-import { Role } from "../entities/Role";
-import { User } from "../entities/User";
+import { Role } from "../entities/role.entity";
+import { User } from "../entities/user.entity.";
 import { RoleEnum } from "../utils/roles";
 
 class AuthService {
@@ -36,6 +36,7 @@ class AuthService {
         throw new Error("Email / password is wrong!");
       }
 
+      const secretKey = process.env.JWT_SECRET as jwt.Secret
       const token = jwt.sign(
         {
           user: {
@@ -45,7 +46,7 @@ class AuthService {
             profile: user.profile,
           },
         },
-        process.env.JWT_SECRET,
+        secretKey,
         { expiresIn: "1h" }
       );
 
@@ -89,7 +90,7 @@ class AuthService {
         email: userData.email,
         name: userData.name,
         password: password,
-        roles: [{ id: role.id }],
+        roles: [{ id: role?.id }],
         profile: { address: "" },
       });
 

@@ -1,61 +1,60 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Post } from "./Post";
-import { Follows } from "./Follow";
-import { Profile } from "./Profile";
-import { Reply } from "./Reply";
-import { Role } from "./Role";
+import { Post } from "./post.entity";
+import { Follows } from "./follow.entity";
+import { Profile } from "./profile.entity";
+import { Reply } from "./reply.entity";
+import { Role } from "./role.entity";
 
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @ManyToMany(() => Role)
   @JoinTable()
-  roles: Role[];
+  roles!: Role[];
 
-  @OneToOne(() => Profile, (profile) => profile.user )
-  profile: Profile;
+  @OneToOne(() => Profile, (profile) => profile.user)
+  profile!: Profile;
 
   @OneToMany(() => Follows, (follows) => follows.follower)
-  followedBy: Follows[];
+  followedBy!: Follows[];
 
   @OneToMany(() => Follows, (follows) => follows.following)
-  following: Follows[];
+  following!: Follows[];
 
   @OneToMany(() => Post, (post) => post.createdBy)
-  posts: Post[];
+  posts!: Post[];
 
   @OneToMany(() => Post, (post) => post.updatedBy)
-  updatedPosts: Post[];
+  updatedPosts!: Post[];
 
   @OneToMany(() => Reply, (reply) => reply.createdBy)
-  replies: Reply[];
+  replies!: Reply[];
 
   @OneToMany(() => Reply, (reply) => reply.updatedBy)
-  updatedReplies: Reply[];
+  updatedReplies!: Reply[];
 
   @Column({ default: () => "now()" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ default: () => "now()", onUpdate: "now()" })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

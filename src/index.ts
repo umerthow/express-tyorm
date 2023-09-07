@@ -1,5 +1,5 @@
 import { AppDataSource } from "./data-source";
-import express from "express";
+import express, { NextFunction } from "express";
 import { Request, Response } from "express";
 import { MainRouter } from "./routes";
 
@@ -15,10 +15,11 @@ AppDataSource.initialize()
     app.use(express.json());
     app.use("/api/v1", new MainRouter().getRouter());
 
-    app.get("/", (req: Request, res: Response) => {
-      res.json({
-        message: "Hello World! 😉",
-      });
+    app.get("/", (req: Request, res: Response, next: NextFunction) => {
+      if (req.originalUrl === '/') {
+        return res.status(200).send('OK');
+      }
+      next()
     });
 
     app.use((req, res, next) => {

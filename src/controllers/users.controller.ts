@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
-import UserService from "../services/UsersService";
+import UserService from "../services/users.service";
 import { responseHandler } from "../utils/handler";
 
 class UserController {
-  async find(req: Request, res: Response, next: NextFunction) {
+  async find(_req: Request, res: Response, next: NextFunction) {
     try {
       const response = await UserService.find();
       
@@ -14,10 +14,10 @@ class UserController {
     }
   }
 
-  async findAllCount(req: Request, res: Response, next: NextFunction) {
+  async findAllConnection(req: Request, res: Response, next: NextFunction) {
     try {
       const query = req.query
-      const response = await UserService.findAllCount(query);
+      const response = await UserService.findAllConnection(query);
       responseHandler(res, response)
     } catch (error) {
       next(error)

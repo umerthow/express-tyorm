@@ -8,42 +8,42 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from "./User";
-import { Post } from "./Post";
-import { ReplyOnReply } from "./ReplyOnReply";
+import { User } from "./user.entity.";
+import { Post } from "./post.entity";
+import { ReplyOnReply } from "./reply-on-reply.entity";
 
 @Entity("replies")
 export class Reply {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column()
-  content: string;
+  content!: string;
 
   @ManyToOne(() => Post, (post) => post.replies)
   @JoinColumn({ name: "postId" })
-  post: Post;
+  post!: Post;
 
   @OneToMany(() => ReplyOnReply, (replyOnReply) => replyOnReply.reply)
-  replies: ReplyOnReply[];
+  replies!: ReplyOnReply[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @ManyToOne(() => User, (user) => user.replies)
   @JoinColumn({ name: "createdById" })
-  createdBy: User;
+  createdBy!: User;
 
   @Column({ nullable: true })
-  createdById: string;
+  createdById!: string;
 
   @ManyToOne(() => User, (user) => user.updatedReplies)
   @JoinColumn({ name: "updatedById" })
-  updatedBy: User;
+  updatedBy!: User;
 
   @Column({ nullable: true })
-  updatedById: string;
+  updatedById!: string;
 }

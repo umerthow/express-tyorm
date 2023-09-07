@@ -1,9 +1,9 @@
-import { In, Like, Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { CreateUserDto } from "../dto/user/create.user.dto";
 import { BulkDeleteUserDto } from "../dto/user/delete.user.dto";
-import { Profile } from "../entities/Profile";
-import { User } from "../entities/User";
+import { Profile } from "../entities/profile.entity";
+import { User } from "../entities/user.entity.";
 import { Paginate } from "../interfaces/icommon.interface";
 import { filtering } from "../utils/filtering";
 import { RoleEnum } from "../utils/roles";
@@ -25,21 +25,14 @@ class UsersService {
     }
   }
 
-  async findAllCount(query: Record<string, any>): Promise<Paginate> {
+  async findAllConnection(query: Record<string, any>): Promise<Paginate> {
     try {
       const take = query.take || 10
       const skip = query.skip || 0
-      const keyword = query.keyword
       const select = query.select
       const filter = filtering(query)
 
       let where: Record<string, any> = {}
-
-      if(keyword) {
-        where = {
-          name: Like('%' + keyword + '%') 
-        }
-      }
 
       if (filter) {
         where = { 
@@ -161,8 +154,8 @@ class UsersService {
       
       return response;
     } catch (err) {
-
-      throw new Error(err);
+      console.error(err);
+      throw new Error("Something went wrong on the server!");
     }
     
   }
