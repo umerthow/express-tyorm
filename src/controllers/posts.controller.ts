@@ -23,6 +23,29 @@ class PostController {
       next(error)
     }
   }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id
+      const body = req.body
+
+      const response = await PostsService.update(id, body);
+
+      responseHandler(res, response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id
+      const response = await PostsService.delete(id);
+      responseHandler(res, response)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new PostController();

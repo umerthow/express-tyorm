@@ -75,6 +75,33 @@ class PostsService {
       throw new Error("Something went wrong on the server!");
     }
   }
+
+  async update(id: string, body: CreatePostsDto) {
+    const getPost = await this.postsRepository.findOneBy({ id })
+    
+    if (!getPost) {
+      throw new Error('posts_not_found')
+    }
+
+    await this.postsRepository.update({ id }, body)
+
+    const response = await this.postsRepository.findOneBy({ id })
+
+    return response
+
+  }
+
+  async delete(id: string): Promise<any> { 
+    const getPost = await this.postsRepository.findOneBy({ id })
+
+      if (!getPost) {
+        throw new Error('posts_not_found')
+      }
+
+      const response = await this.postsRepository.delete({ id })
+      
+      return response;
+  }
 }
 
 export default new PostsService()
