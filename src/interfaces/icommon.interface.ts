@@ -4,3 +4,5 @@ export interface Paginate {
   skip: number,
   take: number
 }
+
+export type  IObject = Record<string, any>

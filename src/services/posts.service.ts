@@ -1,9 +1,11 @@
 import { AppDataSource } from "../data-source";
 import { Post } from "../entities/post.entity";
 import { Repository } from "typeorm";
-import { CreatePostsDto } from "dto/user/create.posts.dto";
+import { CreatePostsDto } from "dto/posts/create.posts.dto";
 import { Paginate } from "interfaces/icommon.interface";
 import { filtering } from "../utils/filtering";
+import { UpdatePostsDto } from "dto/posts/update.posts.dto";
+import { IQuery } from "interfaces/iquery.interface";
 
 class PostsService {
   private readonly postsRepository: Repository<Post> = AppDataSource.getRepository(Post)
@@ -29,15 +31,33 @@ class PostsService {
     return getData;
   }
 
-  async find(): Promise<any> {
+  async find(query: IQuery): Promise<any> {
+    const take = query.take || 10
+    const skip = query.skip || 0
+    const select = query.select
+    const filter = filtering(query)
+    let where: Record<string, any> = {}
+
+    if (filter) {
+      where = { 
+        ...where,
+        ...filter
+      }
+    }
     const response = await this.postsRepository.find({
+      select,
+      where: {
+        ...where
+       }, order: { title: "DESC" },
+      take: take,
+      skip: skip,
       relations:['createdBy', 'updatedBy']
     });
 
     return response;
   }
 
-  async findAllConnection(query: Record<string, any>): Promise<Paginate> {
+  async findAllConnection(query: IQuery): Promise<Paginate> {
     try {
       const take = query.take || 10
       const skip = query.skip || 0
@@ -52,12 +72,12 @@ class PostsService {
           ...filter
         }
       }
-
+      
       const response = await this.postsRepository.findAndCount({
         select,
         where: {
           ...where
-         }, order: { title: "DESC" },
+         }, order: { id: "DESC" },
         take: take,
         skip: skip
       });
@@ -76,7 +96,7 @@ class PostsService {
     }
   }
 
-  async update(id: string, body: CreatePostsDto) {
+  async update(id: string, body: UpdatePostsDto) {
     const getPost = await this.postsRepository.findOneBy({ id })
     
     if (!getPost) {
