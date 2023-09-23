@@ -24,6 +24,9 @@ export class Reply {
   @JoinColumn({ name: "postId" })
   post!: Post;
 
+  @Column({ nullable: true })
+  postId!: string;
+
   @OneToMany(() => ReplyOnReply, (replyOnReply) => replyOnReply.reply)
   replies!: ReplyOnReply[];
 
