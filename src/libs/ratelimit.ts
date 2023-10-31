@@ -23,7 +23,7 @@ class RateLimit {
           ...value,
           attempt: data.attempt + 1
         }),
-        this.duration
+        {EX: this.duration}
       )
     }
 
@@ -40,12 +40,18 @@ class RateLimit {
   async validate() {
     const getData = await client.get(this.name)
     const parseData = JSON.parse(getData) || ''
+    const ttl = await client.ttl(this.name)
 
     if (parseData) {
       const { identifier, limit, attempt } = parseData
 
       if (attempt > limit) {
-        throw new Error(`Access limit maximum attempt ${limit} times per minutes` )
+        const error = JSON.stringify({
+          code: 'RATE_LIMIT',
+          message: `Maximum attempt ${limit} times per minutes. Please waiting in ${ttl}s`
+        })
+
+        throw new Error(error)
       }
 
       return {

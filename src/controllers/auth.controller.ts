@@ -10,10 +10,17 @@ class AuthController {
       responseHandler(res, response)
     } catch (error) {
 
-      console.log(error);
-      return res
+      const errorParse = JSON.parse(error.message) || ''
+      if (errorParse) {
+        return res
         .status(401)
-        .json({ message: error.message });
+        .json({ 
+          code: errorParse.code,
+          message: errorParse.message 
+        });
+      }
+
+      next(error)
     }
 
   }
