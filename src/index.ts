@@ -6,6 +6,7 @@ import { MainRouter } from "./routes";
 import cors from "cors";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/error";
+import { client } from "./redis-client";
 
 AppDataSource.initialize()
   .then(async () => {
@@ -30,6 +31,8 @@ AppDataSource.initialize()
 
     app.use(errorMiddleware)
   
+    await client.connect()
+
     app.listen(port, () => {
       console.log("Server running in port " + port);
     });

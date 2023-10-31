@@ -5,6 +5,7 @@ import { AppDataSource } from "../data-source";
 import { Role } from "../entities/role.entity";
 import { User } from "../entities/user.entity.";
 import { RoleEnum } from "../utils/roles";
+import RateLimit from "../libs/ratelimit";
 
 class AuthService {
   private readonly authRepository: Repository<User> =
@@ -14,18 +15,22 @@ class AuthService {
     AppDataSource.getRepository(Role);
 
   async login(loginData: any): Promise<any> {
-    try {
       let user = await this.authRepository.findOne({
         where: {
           email: loginData.email,
         },
       });
 
-      console.log("data user", user);
-
       if (!user) {
         throw new Error("Email / password is wrong!");
       }
+
+      const rateLimitLogin = new RateLimit('login', 60)
+
+      await rateLimitLogin.active({
+        identifier: loginData.email,
+        limit: 3
+      })
 
       const isPasswordValid = await bcrypt.compare(
         loginData.password,
@@ -60,9 +65,7 @@ class AuthService {
         },
         token: token,
       };
-    } catch (err) {
-      throw new Error("Something went wrong on the server!");
-    }
+    
   }
 
   async register(userData: any): Promise<any> {
