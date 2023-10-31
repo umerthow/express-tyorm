@@ -25,7 +25,8 @@ class AuthService {
         throw new Error("Email / password is wrong!");
       }
 
-      const rateLimitLogin = new RateLimit('login', 60)
+      const keyName = `login:${loginData.email}`
+      const rateLimitLogin = new RateLimit(keyName, 60)
 
       await rateLimitLogin.active({
         identifier: loginData.email,

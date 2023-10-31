@@ -5,4 +5,10 @@ export interface Paginate {
   take: number
 }
 
+
+export interface RateLimitData {
+  identifier: string,
+  limit: number
+}
+
 export type  IObject = Record<string, any>

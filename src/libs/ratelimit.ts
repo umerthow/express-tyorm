@@ -1,5 +1,5 @@
+import { RateLimitData } from "../interfaces/icommon.interface";
 import { client } from "../redis-client";
-
 class RateLimit {
 
   private name 
@@ -13,7 +13,7 @@ class RateLimit {
     this.duration = duration
   }
 
-  async active(value: any) {
+  async active(value: RateLimitData) {
     const data = await this.validate()
 
     if (data) {
@@ -58,7 +58,6 @@ class RateLimit {
         identifier,
         attempt
       }
-
     }
 
     return null

@@ -9,15 +9,17 @@ class AuthController {
       
       responseHandler(res, response)
     } catch (error) {
-
       const errorParse = JSON.parse(error.message) || ''
+      
       if (errorParse) {
-        return res
-        .status(401)
-        .json({ 
-          code: errorParse.code,
-          message: errorParse.message 
-        });
+        if (errorParse.code === 'RATE_LIMIT') {
+          return res
+          .status(429)
+          .json({ 
+            code: errorParse.code,
+            message: errorParse.message 
+          });
+        }
       }
 
       next(error)
