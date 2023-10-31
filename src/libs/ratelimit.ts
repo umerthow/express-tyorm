@@ -33,7 +33,7 @@ class RateLimit {
           ...value,
           attempt: 1
         }),
-        this.duration
+        {EX: this.duration}
     )
   }
 
